@@ -26,7 +26,7 @@ def busca_star(origem, destino):
     caminho = {} # Guardar o caminho escolhido
     
     while fronteira:
-        atual, _ = min(fronteira, key=lambda x: '????' + heuristica[x[0]]     ) # Busca Gulosa <--- alteração para A*
+        atual, _ = min(fronteira, key=lambda x: heuristica[x[0]]     ) # Busca Gulosa <--- alteração para A*
         fronteira = list(filter(lambda x: x[0] != atual, fronteira)) # Remove a cidade atual da fronteira
         
         print(f"Visitando: {atual}")
