@@ -19,12 +19,12 @@ def calculaHeuristica(matriz):
     return heuristica
 
 
-def testePossiveisMovimentos(estado_inicial):
-    possibilidades = []
+def testePossiveisMovimentos(estado_inicial, possibilidades):
+
     for linha in range(len(estado_inicial)):
         for coluna in range(len(estado_inicial[linha])):
             if estado_inicial[linha][coluna] == 0:             
-                if linha > 0:
+                if (linha > 0):
                     estado = [row[:] for row in estado_inicial]
                     estado[linha][coluna], estado[linha-1][coluna] = estado[linha-1][coluna], estado[linha][coluna]
                     possibilidades.append(estado)
@@ -48,17 +48,37 @@ def testePossiveisMovimentos(estado_inicial):
                     possibilidades.append(estado)
     return possibilidades
 
+def proximoMovimento(jogoAtual, listaExlusao):
+    melhorHeuristica = None 
+    possibilidades = []
+    for possibilidade in testePossiveisMovimentos(jogoAtual, possibilidades):
+        heuristica = calculaHeuristica(possibilidade)
 
+        if (melhorHeuristica is None or heuristica < melhorHeuristica) and possibilidade not in listaExlusao:
+            melhorHeuristica = heuristica
+            proxMovimento = possibilidade
+    return proxMovimento
 
-
+    
 inicioJogo = [[1, 0, 3], [4, 2, 5], [7, 8, 6]]
 fimJogo = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
 
 
-for possibilidade in testePossiveisMovimentos(inicioJogo):
-    printaMatriz(possibilidade)
-    print(calculaHeuristica(possibilidade))
-    print()
 
-estado = [row[:] for row in inicioJogo]
-print(estado)
+
+def eightpuzle(pontoPartida, resultadoFinal):
+    
+    
+    movimento = pontoPartida
+    movimentoPassado = []
+    print("Inicio do jogo:\n")
+    while movimento != resultadoFinal:
+        movimentoPassado.append(movimento)
+        printaMatriz(movimento)
+        print()
+        movimento = proximoMovimento(movimento, movimentoPassado)
+
+    printaMatriz(movimento)
+    print("\nO jogo atingiu o resultado final!")
+
+eightpuzle(inicioJogo, fimJogo)
