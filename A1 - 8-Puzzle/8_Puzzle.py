@@ -4,6 +4,7 @@ def printaMatriz(matriz):
             print(coluna, end=' ')
         print()
 
+# Entrega o valor heuristico de uma matriz, considerando a distancia e o custo.
 def calculaHeuristica(matriz):
     erros = 0
     acertos = 0
@@ -17,6 +18,18 @@ def calculaHeuristica(matriz):
                 erros += 1
     heuristica = posicao - acertos + erros
     return heuristica
+
+# Descobre qual menor valor heuristco dentro da lista de possibilidades(que não foram jogadas ainda) e retorna a matriz desse valor heuristico
+def proximoMovimento(jogoAtual, listaExlusao):
+    melhorHeuristica = None 
+    possibilidades = []
+    for possibilidade in testePossiveisMovimentos(jogoAtual, possibilidades):
+        heuristica = calculaHeuristica(possibilidade)
+
+        if (melhorHeuristica is None or heuristica < melhorHeuristica) and possibilidade not in listaExlusao:
+            melhorHeuristica = heuristica
+            proxMovimento = possibilidade
+    return proxMovimento
 
 
 def testePossiveisMovimentos(estado_inicial, possibilidades):
@@ -48,17 +61,6 @@ def testePossiveisMovimentos(estado_inicial, possibilidades):
                     possibilidades.append(estado)
     return possibilidades
 
-def proximoMovimento(jogoAtual, listaExlusao):
-    melhorHeuristica = None 
-    possibilidades = []
-    for possibilidade in testePossiveisMovimentos(jogoAtual, possibilidades):
-        heuristica = calculaHeuristica(possibilidade)
-
-        if (melhorHeuristica is None or heuristica < melhorHeuristica) and possibilidade not in listaExlusao:
-            melhorHeuristica = heuristica
-            proxMovimento = possibilidade
-    return proxMovimento
-
     
 inicioJogo = [[1, 0, 3], [4, 2, 5], [7, 8, 6]]
 fimJogo = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
@@ -70,13 +72,13 @@ def eightpuzle(pontoPartida, resultadoFinal):
     
     
     movimento = pontoPartida
-    movimentoPassado = []
+    movimentosPassados = []
     print("Inicio do jogo:\n")
     while movimento != resultadoFinal:
-        movimentoPassado.append(movimento)
+        movimentosPassados.append(movimento)
         printaMatriz(movimento)
         print()
-        movimento = proximoMovimento(movimento, movimentoPassado)
+        movimento = proximoMovimento(movimento, movimentosPassados)
 
     printaMatriz(movimento)
     print("\nO jogo atingiu o resultado final!")
